@@ -190,8 +190,8 @@
    SET THESE ONCE. Adding a magnet afterward never touches code.
    ===================================================================== */
 const CONFIG = {
-  formEndpoint: "",           // where every signup lands (Formspree etc). Blank = preview mode.
-  provider: "formspree",      // "formspree" | "generic"
+  formEndpoint: "https://script.google.com/macros/s/AKfycbz-Q6jG7vBqwYOtYEwlOCZFRi6R0saatVf4_aViUdcySEt3topYQBiWEpx8SDQZ74Lh/exec",
+  provider: "gsheet",         // "formspree" | "gsheet" | "generic"
   sheetUrl: ""                // published Google Sheet CSV. Blank = use MAGNETS below.
 };
 
@@ -319,9 +319,17 @@ $('capture').addEventListener('submit', async (e)=>{
   const m=MAP[activeSlug];
   try{
     if(CONFIG.formEndpoint){
-      const body = CONFIG.provider==='formspree' ? {email,magnet:activeSlug} : {email,magnet:activeSlug,source:'lead-magnet'};
-      const res=await fetch(CONFIG.formEndpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)});
-      if(!res.ok) throw new Error('failed');
+      if(CONFIG.provider==='gsheet'){
+        // Google Apps Script web app: text/plain + no-cors avoids the CORS preflight. The response is
+        // opaque, so send it in the background and reveal the prompt without waiting on it.
+        try{ fetch(CONFIG.formEndpoint,{method:'POST',mode:'no-cors',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body:JSON.stringify({email,magnet:activeSlug,ts:new Date().toISOString()})}).catch(function(){}); }catch(gsErr){}
+      } else {
+        const body = CONFIG.provider==='formspree' ? {email,magnet:activeSlug} : {email,magnet:activeSlug,source:'lead-magnet'};
+        const res=await fetch(CONFIG.formEndpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)});
+        if(!res.ok) throw new Error('failed');
+      }
     } else { await new Promise(r=>setTimeout(r,600)); }
     deliver(m);
   }catch(err){
