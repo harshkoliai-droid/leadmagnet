@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Free guides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --maroon:#7a1e2d;--maroon-deep:#5c1622;--ink:#221a1c;--bg:#fbf8f5;
+    --line:#e7ded4;--muted:#6f625f;--ok:#2f6b3f;--radius:14px;
+    --dark:#1b1416;--shadow:0 24px 60px -24px rgba(70,20,28,.5);
+  }
+  *{box-sizing:border-box}html,body{margin:0}
+  body{
+    font-family:"Inter",system-ui,sans-serif;color:var(--ink);background-color:var(--bg);
+    line-height:1.55;-webkit-font-smoothing:antialiased;
+    background-image:
+      linear-gradient(rgba(122,30,45,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(122,30,45,.03) 1px, transparent 1px);
+    background-size:48px 48px;
+  }
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(55% 40% at 50% 14%, rgba(122,30,45,.10), transparent 72%);}
+  .view{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;
+    justify-content:center;margin:0 auto;padding:clamp(40px,7vh,88px) clamp(20px,5vw,32px);}
+  #home{max-width:720px}
+  #magnet{max-width:600px;align-items:center;text-align:center}
+  .hidden{display:none!important}
+  .boot{position:fixed;inset:0;display:grid;place-items:center;color:var(--muted);font-size:.95rem;z-index:2}
+
+  .wordmark{font-size:.78rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--maroon)}
+  h1{font-family:"Fraunces",serif;letter-spacing:-.015em;line-height:1.04;margin:0;color:var(--ink)}
+
+  /* HOME menu */
+  .home-h1{font-weight:600;font-size:clamp(2.2rem,6.4vw,3.5rem);margin:.32em 0 .28em}
+  .home-h1 em{font-style:italic;font-weight:400;color:#9a8d89}
+  .home-sub{color:var(--muted);font-size:clamp(1.02rem,1.9vw,1.18rem);max-width:44ch;margin:0 0 34px}
+  .menu{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .menu-row a{display:flex;align-items:center;gap:20px;padding:17px 8px;border-bottom:1px solid var(--line);
+    text-decoration:none;color:var(--ink);transition:background .16s;border-radius:8px}
+  .m-num{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;color:var(--maroon);
+    letter-spacing:.06em;flex:none;width:2.6em;opacity:.85}
+  .m-title{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(1.14rem,2.5vw,1.5rem);flex:1;
+    transition:color .16s;line-height:1.2}
+  .m-arrow{color:#bcaea7;flex:none;transition:transform .18s, color .18s;font-size:1.05rem}
+  .menu-row a:hover{background:rgba(122,30,45,.055)}
+  .menu-row a:hover .m-title{color:var(--maroon-deep)}
+  .menu-row a:hover .m-arrow{transform:translateX(5px);color:var(--maroon)}
+  .menu-row a:focus-visible{outline:2px solid var(--maroon);outline-offset:2px}
+  .home-foot{margin-top:28px;font-size:.8rem;letter-spacing:.03em;color:#9b8f89}
+
+  /* MAGNET card */
+  .mag-card{width:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+  .topslot{width:100%;min-height:1.1em;margin-bottom:18px}
+  .topslot.left{text-align:left}.topslot.center{text-align:center}
+  .back{display:inline-block;font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--maroon)}
+  .wordmark-sm{font-size:.76rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--maroon)}
+  .pitch{width:100%;display:flex;flex-direction:column;align-items:center}
+
+  .pill{display:inline-flex;align-items:center;gap:8px;font-size:.76rem;font-weight:600;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--maroon);background:rgba(122,30,45,.07);
+    border:1px solid rgba(122,30,45,.16);padding:6px 13px;border-radius:999px}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--maroon)}
+  .cover{width:196px;aspect-ratio:4/5;border-radius:17px;margin:26px 0 6px;
+    background:linear-gradient(155deg,var(--maroon),var(--maroon-deep));color:#fff;
+    box-shadow:var(--shadow);padding:22px 20px;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;text-align:left}
+  .cover::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(120% 80% at 82% 0%, rgba(255,255,255,.18), transparent 60%);}
+  .c-kicker{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+  .c-title{font-family:"Fraunces",serif;font-weight:500;font-size:1.2rem;line-height:1.12;margin-top:auto;max-width:9ch}
+  .c-by{font-size:.76rem;opacity:.85;margin-top:10px}
+  .tile{position:absolute;right:16px;bottom:16px;width:44px;height:44px;border-radius:12px;background:#fff;
+    box-shadow:0 8px 20px -6px rgba(60,20,25,.5);display:flex;align-items:center;justify-content:center}
+  .tile span{font-family:"Fraunces",serif;font-weight:600;font-size:1.25rem;
+    background:linear-gradient(135deg,#1f8a70,#2b6fb0);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .mag-h1{font-weight:500;font-size:clamp(2rem,6vw,2.9rem);margin:.5em 0 .32em;max-width:18ch}
+  .mag-h1 .accent{font-style:italic;font-weight:400;color:#9a8d89}
+  .intro{font-size:clamp(1rem,2.2vw,1.14rem);color:var(--muted);max-width:40ch;margin:0 0 28px}
+
+  form{display:flex;flex-direction:column;gap:11px;width:100%;max-width:400px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  input[type=email]{width:100%;font:inherit;font-size:1.02rem;color:var(--ink);text-align:center;
+    padding:15px 16px;border:1.5px solid var(--line);border-radius:var(--radius);background:#fff;
+    transition:border-color .15s, box-shadow .15s;}
+  input[type=email]::placeholder{color:#a99e97}
+  input[type=email]:focus{outline:none;border-color:var(--maroon);box-shadow:0 0 0 4px rgba(122,30,45,.12)}
+  input.invalid{border-color:#b5482f;box-shadow:0 0 0 4px rgba(181,72,47,.12)}
+  button.cta{font:inherit;font-weight:600;font-size:1.02rem;color:#fff;cursor:pointer;background:var(--maroon);
+    border:none;border-radius:var(--radius);padding:15px 20px;transition:background .15s, transform .06s;
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;width:100%}
+  button.cta:hover{background:var(--maroon-deep)}button.cta:active{transform:translateY(1px)}
+  button.cta[disabled]{opacity:.65;cursor:default}
+  button.cta .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;
+    border-radius:50%;animation:spin .7s linear infinite;display:none}
+  button.cta.loading .spin{display:inline-block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .fineprint{font-size:.82rem;color:#9b8f89;margin-top:4px}
+  .msg{font-size:.9rem;min-height:0;color:#b5482f}
+
+  /* AFTER EMAIL — bold dark delivery */
+  .reveal{display:none;width:100%;max-width:560px;margin:0 auto;text-align:center}
+  .reveal.show{display:block;animation:rise .5s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .r-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:600;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ok);background:rgba(47,107,63,.1);
+    border:1px solid rgba(47,107,63,.22);padding:6px 13px;border-radius:999px}
+  .r-title{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(1.7rem,4.4vw,2.2rem);margin:.55em 0 22px;color:var(--ink)}
+  .box{position:relative;text-align:left;background:var(--dark);border-radius:18px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.06);box-shadow:0 34px 80px -34px rgba(40,10,16,.65)}
+  .box::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--maroon),#c06478)}
+  .box-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;
+    border-bottom:1px solid rgba(255,255,255,.08)}
+  .glabel{font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#cf929b}
+  .copy{font:inherit;font-weight:700;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--maroon-deep);background:#efe0dc;border:none;border-radius:9px;padding:10px 18px;cursor:pointer;
+    transition:background .15s, transform .06s;white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+  .copy svg{width:14px;height:14px}
+  .copy:hover{background:#fff}.copy:active{transform:translateY(1px)}
+  .gbody{padding:20px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92rem;line-height:1.62;
+    color:#dacfc9;white-space:pre-wrap;word-break:break-word;max-height:54vh;overflow:auto}
+  .gbody::-webkit-scrollbar{width:9px}.gbody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}
+  .dl{display:inline-flex;align-items:center;justify-content:center;gap:9px;margin-top:16px;font-weight:600;
+    text-decoration:none;color:#fff;background:var(--maroon);padding:14px 22px;border-radius:var(--radius);width:100%}
+  .dl:hover{background:var(--maroon-deep)}
+  .done{font-size:.84rem;color:#9b8f89;margin:16px 0 0}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <div class="boot" id="boot">Loading…</div>
+
+  <!-- HOME -->
+  <section id="home" class="view hidden">
+    <span class="wordmark">@harshhh__ai</span>
+    <h1 class="home-h1">Grab the prompt <em>you came for.</em></h1>
+    <p class="home-sub">Tap the one you want and I'll drop it straight to your inbox.</p>
+    <ol class="menu" id="menu"></ol>
+    <p class="home-foot">Free to grab, and you can unsubscribe in one click.</p>
+  </section>
+
+  <!-- MAGNET -->
+  <section id="magnet" class="view hidden">
+    <div class="mag-card">
+      <div class="topslot" id="topslot"></div>
+
+      <div class="pitch" id="pitch">
+        <span class="pill"><span class="dot"></span>Free download</span>
+        <div class="cover">
+          <span class="c-kicker" id="c-kicker"></span>
+          <span class="c-title" id="c-title"></span>
+          <span class="c-by" id="c-by"></span>
+          <div class="tile"><span>h</span></div>
+        </div>
+        <h1 class="mag-h1"><span id="h1lead"></span> <em class="accent" id="h1accent"></em></h1>
+        <p class="intro" id="intro"></p>
+        <form id="capture" novalidate>
+          <label class="sr" for="email">Email address</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required />
+          <button type="submit" class="cta" id="submit"><span class="label">Get instant access</span><span class="spin" aria-hidden="true"></span></button>
+          <p class="fineprint">No spam, and you can leave with one click.</p>
+          <p class="msg" id="msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="reveal" id="reveal">
+        <span class="r-eyebrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>You're in</span>
+        <h2 class="r-title" id="r-title"></h2>
+        <div class="box" id="box">
+          <div class="box-head">
+            <span class="glabel" id="glabel">Copy the prompt</span>
+            <button type="button" class="copy" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="cl">Copy</span></button>
+          </div>
+          <div class="gbody" id="gbody"></div>
+        </div>
+        <div id="fileArea"></div>
+        <p class="done">It's on its way to your inbox too, so you've always got it.</p>
+      </div>
+    </div>
+  </section>
+
+<script>
+/* =====================================================================
+   SET THESE ONCE. Adding a magnet afterward never touches code.
+   ===================================================================== */
+const CONFIG = {
+  formEndpoint: "",           // where every signup lands (Formspree etc). Blank = preview mode.
+  provider: "formspree",      // "formspree" | "generic"
+  sheetUrl: ""                // published Google Sheet CSV. Blank = use MAGNETS below.
+};
+
+/* Order here = order on the home menu. Sheet columns:
+   slug, menu_title, kicker, title, title_accent, author, intro, box_label, content, download_url */
+const MAGNETS = [
+  { slug:"carousel-prompt", menu_title:"Carousel Prompt",
+    kicker:"The Prompt", title:"Write your next carousel", titleAccent:"in one paste.", author:"@harshhh__ai",
+    intro:"Enter your email and the full prompt drops in right below, already shaped so you can hand Claude Code a single topic and get a finished seven-slide carousel back.",
+    boxLabel:"Copy the prompt",
+    content:"You are my carousel co-writer. Give me a topic and hand back a seven-slide Instagram carousel. Slide one has to earn the swipe on its own, and every slide after it carries a single idea backed by a concrete example so nothing floats off into abstraction, right up until the final slide lands on a line that makes saving the post feel like the obvious move. Write it the way someone actually talks so it flows instead of reading like chopped fragments, and steer clear of any 'it is not X, it is Y' phrasing.\n\nTopic: [drop your topic here]",
+    downloadUrl:"" }
+];
+/* ===================================================================== */
+
+const $ = (id) => document.getElementById(id);
+let MAP = {}, ORDER = [], activeSlug = null;
+
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+async function loadMagnets(){
+  if(!CONFIG.sheetUrl){ MAP={};ORDER=[]; MAGNETS.forEach(m=>{MAP[m.slug]=m;ORDER.push(m.slug);}); return; }
+  if(typeof Papa==='undefined'){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js'); }
+  const csv = await fetch(CONFIG.sheetUrl).then(r=>r.text());
+  const rows = Papa.parse(csv, {header:true, skipEmptyLines:true}).data;
+  MAP={};ORDER=[];
+  rows.forEach(r=>{
+    if(!r.slug) return; const s=r.slug.trim();
+    MAP[s]={ slug:s, menu_title:r.menu_title||r.title||s, kicker:r.kicker||"",
+      title:r.title||"", titleAccent:r.title_accent||r.titleAccent||"", author:r.author||"@harshhh__ai",
+      intro:r.intro||r.subtitle||"", boxLabel:r.box_label||r.boxLabel||"Copy this",
+      content:r.content||"", downloadUrl:r.download_url||r.downloadUrl||"" };
+    ORDER.push(s);
+  });
+}
+
+function currentSlug(){
+  const q=new URLSearchParams(location.search).get('m'); if(q) return q.trim();
+  return location.pathname.replace(/^\/+|\/+$/g,'').trim();
+}
+function showView(which){
+  $('home').classList.toggle('hidden', which!=='home');
+  $('magnet').classList.toggle('hidden', which!=='magnet');
+}
+function renderHome(){
+  const menu=$('menu'); menu.innerHTML='';
+  ORDER.forEach((slug,i)=>{
+    const m=MAP[slug]; const li=document.createElement('li'); li.className='menu-row';
+    const a=document.createElement('a'); a.href='/'+slug; a.dataset.slug=slug;
+    a.innerHTML='<span class="m-num">'+String(i+1).padStart(3,'0')+'</span><span class="m-title"></span><span class="m-arrow">&rarr;</span>';
+    a.querySelector('.m-title').textContent=m.menu_title; li.appendChild(a); menu.appendChild(li);
+  });
+}
+function renderMagnet(m){
+  activeSlug=m.slug;
+  const ts=$('topslot');
+  if(ORDER.length>1){ ts.className='topslot left'; ts.innerHTML='<a class="back" href="/" data-home>&larr; All guides</a>'; }
+  else { ts.className='topslot center'; ts.innerHTML='<span class="wordmark-sm">@harshhh__ai</span>'; }
+  $('c-kicker').textContent=m.kicker||"Free download";
+  $('c-title').textContent=m.title||"";
+  $('c-by').textContent=m.author||"@harshhh__ai";
+  $('h1lead').textContent=m.title||"";
+  const acc=$('h1accent'); if(m.titleAccent){acc.textContent=m.titleAccent;acc.style.display='';}else{acc.style.display='none';}
+  $('intro').textContent=m.intro||"";
+  document.title=(m.menu_title||m.kicker||'Free guide');
+  // reset to the locked pitch
+  $('pitch').style.display='flex';
+  const form=$('capture'); form.style.display='flex'; form.reset();
+  $('msg').textContent=''; $('email').classList.remove('invalid');
+  const btn=$('submit'); btn.classList.remove('loading'); btn.disabled=false;
+  $('reveal').classList.remove('show'); $('fileArea').innerHTML='';
+}
+function renderSlug(slug){
+  if(slug && MAP[slug]){ renderMagnet(MAP[slug]); showView('magnet'); }
+  else if(ORDER.length===1){ renderMagnet(MAP[ORDER[0]]); showView('magnet'); }
+  else { renderHome(); showView('home'); }
+  try{ window.scrollTo(0,0); }catch(e){}
+}
+function route(){ renderSlug(currentSlug()); }
+function go(slug){ try{ history.pushState({slug}, '', slug?'/'+slug:'/'); }catch(e){} renderSlug(slug); }
+
+document.addEventListener('click', e=>{
+  const a=e.target.closest('a[data-slug]'); if(a){ e.preventDefault(); go(a.dataset.slug); return; }
+  const h=e.target.closest('a[data-home]'); if(h){ e.preventDefault(); go(''); }
+});
+window.addEventListener('popstate', route);
+(async function init(){
+  try{ await loadMagnets(); }catch(e){ MAP={};ORDER=[];MAGNETS.forEach(m=>{MAP[m.slug]=m;ORDER.push(m.slug);}); }
+  $('boot').classList.add('hidden'); route();
+})();
+
+/* deliver */
+function deliver(m){
+  $('r-title').textContent = m.menu_title || m.title || "Your prompt";
+  const hasContent=!!(m.content && m.content.trim());
+  const hasFile=!!(m.downloadUrl && m.downloadUrl.trim());
+  const box=$('box');
+  if(hasContent || (!hasContent && !hasFile)){
+    box.style.display='';
+    if(hasContent){ $('glabel').textContent=m.boxLabel||"Copy this"; $('gbody').textContent=m.content; }
+    else { $('glabel').textContent="Nothing here yet"; $('gbody').textContent="Add this magnet's prompt (content) or a file link (download_url) and it shows up right here."; }
+    $('copyBtn').onclick=async ()=>{
+      const lbl=$('copyBtn').querySelector('.cl');
+      try{ await navigator.clipboard.writeText(m.content||''); lbl.textContent='Copied'; setTimeout(()=>{lbl.textContent='Copy';},1600); }
+      catch(err){ const rng=document.createRange(); rng.selectNodeContents($('gbody')); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(rng); lbl.textContent='Ctrl/Cmd+C'; }
+    };
+  } else { box.style.display='none'; }
+  const fa=$('fileArea'); fa.innerHTML='';
+  if(hasFile){
+    const a=document.createElement('a'); a.className='dl'; a.href=m.downloadUrl; a.setAttribute('download','');
+    a.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Download now';
+    fa.appendChild(a);
+  }
+  $('pitch').style.display='none';
+  $('reveal').classList.add('show');
+}
+
+const validEmail=(v)=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+$('capture').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const input=$('email'), btn=$('submit'), msg=$('msg');
+  msg.textContent=''; input.classList.remove('invalid');
+  const email=input.value.trim();
+  if(!validEmail(email)){ input.classList.add('invalid'); msg.textContent="That email doesn't look right — mind checking it?"; input.focus(); return; }
+  btn.classList.add('loading'); btn.disabled=true;
+  const m=MAP[activeSlug];
+  try{
+    if(CONFIG.formEndpoint){
+      const body = CONFIG.provider==='formspree' ? {email,magnet:activeSlug} : {email,magnet:activeSlug,source:'lead-magnet'};
+      const res=await fetch(CONFIG.formEndpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)});
+      if(!res.ok) throw new Error('failed');
+    } else { await new Promise(r=>setTimeout(r,600)); }
+    deliver(m);
+  }catch(err){
+    btn.classList.remove('loading'); btn.disabled=false;
+    msg.textContent='Something went wrong on our end — try again in a moment.';
+  }
+});
+</script>
+</body>
+</html>
