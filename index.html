@@ -202,7 +202,52 @@ const MAGNETS = [
     kicker:"The Prompt", title:"Write your next carousel", titleAccent:"in one paste.", author:"@harshhh__ai",
     intro:"Enter your email and the full prompt drops in right below, already shaped so you can hand Claude Code a single topic and get a finished seven-slide carousel back.",
     boxLabel:"Copy the prompt",
-    content:"You are my carousel co-writer. Give me a topic and hand back a seven-slide Instagram carousel. Slide one has to earn the swipe on its own, and every slide after it carries a single idea backed by a concrete example so nothing floats off into abstraction, right up until the final slide lands on a line that makes saving the post feel like the obvious move. Write it the way someone actually talks so it flows instead of reading like chopped fragments, and steer clear of any 'it is not X, it is Y' phrasing.\n\nTopic: [drop your topic here]",
+    content:"You're helping me build a 6-slide animated Instagram carousel. I'll give you a topic and, usually, reference screenshots from another creator. Rebuild each slide in MY brand as a self-contained HTML file at 1080×1350, then give me a converter that turns it into an MP4. Treat the references as structure and inspiration only, and never reuse their wording.
+
+── MY BRAND (fill these in) ──
+- Accent color: [YOUR HEX, e.g. a deep maroon]. Where it would disappear on a dark surface, lighten it to a readable tint of the same hue.
+- Background: soft off-white radial gradient, brightest near the top-center.
+- Headline font: a heavy geometric sans (e.g. Inter 900), near-black, tight letter-spacing, with exactly one word or phrase in the accent color.
+- Kicker + mono elements (chips, footer, terminal text, numbers): a monospace (e.g. Space Mono), uppercase, wide letter-spacing.
+- Footer: [@YOURHANDLE] in the accent color, then a short gray tagline, and on the right the page number "N / 6" with an accent arrow. Drop the arrow on the last slide.
+- Money figures use green (#16a34a), never the accent, because green reads as "paid."
+- Comment keyword for the call to action: [YOUR KEYWORD].
+- Canvas: 1080×1350 (4:5), everything positioned for that exact frame.
+
+── SLIDE ANATOMY ──
+Every slide shares this skeleton, top to bottom: a kicker (short uppercase tag), a headline with one accent phrase, one main body element that changes per slide, an optional row of mono chips or a subtext line with its own accent phrase, and the footer with the page number.
+
+── THE 6-BEAT ARC ──
+1. Cover / hook — a big-promise headline plus a clip in a rounded card.
+2. How it works — a dark terminal card showing the core steps or prompts, the result clip below, and the comment-keyword call to action.
+3. The options — a 3×2 grid of cards (styles or features), each holding a short clip or thumbnail.
+4. The strongest benefit — a single clip, two mono chips, and a one-line payoff.
+5. The proof — animated cards (like payment notifications) that rise in one after another, with an illustrative disclaimer so it never reads as a guarantee.
+6. The close — a dark card with the keyword button, a one-line offer, and my avatar bottom-right.
+
+── COPY VOICE (strict, never break) ──
+- No lists of three. Don't stack three parallel items for rhythm; fold the idea into one flowing sentence or pick the single strongest item.
+- No "it's not X, it's Y" constructions. State the point directly.
+- No staccato fragments. Chain ideas with and / but / so / because so it reads like real speech.
+- Numerals in headlines ("10-minute", not "ten-minute").
+- Rewrite every reference line so it sounds like me, and lead with the benefit or money angle rather than restating a spec.
+- One accent phrase in the headline, one in the subtext. Keep any income numbers illustrative and say so on the proof slide.
+
+── BUILD SPEC ──
+- Each slide is one self-contained .html file at 1080×1350, with the fonts inlined as base64 @font-face so it renders anywhere with no fonts folder.
+- Absolute-position everything against the 1080×1350 canvas. Measure real bounding boxes with headless Chromium instead of eyeballing, confirm nothing overlaps, keep the gaps between blocks even, and leave about 120px of room above the footer.
+- Video slides hold: <video class="clip" src="assets/NAME.mp4" autoplay muted loop playsinline> inside a rounded card with overflow:hidden.
+- The grid slide holds six <video> elements in six cards, clips named 1.mp4–6.mp4 in reading order.
+- Animated slides run every animation off one clock: each element carries a --start value (its stagger in seconds), and a small inline script reads a ?t=<seconds> URL param, sets --t, and freezes every animation at that instant with animation-delay: calc((var(--start) - var(--t)) * 1s) plus animation-play-state: paused. Without the param the animations autoplay for live preview.
+
+── EXPORT: THREE CONVERTERS (Node + puppeteer-core + ffmpeg, supersampled ×2 for crisp text, output 1080×1350) ──
+- convert.js — one clip into one card. Finds the card from the video's parent, screenshots the still with the video hidden, composites the clip cover-cropped into the rounded card through a rounded mask, and carries the clip's own audio. Use for the cover and any single-clip slide.
+- convert-grid.js — many clips into many cards. Reads each <video> src from the HTML, builds one top-rounded mask, composites every clip in a single ffmpeg pass, and runs for the longest clip while looping the shorter ones. Use for the grid slide.
+- convert-anim.js — a CSS-animated slide with no clip. Steps through ?t= frame by frame and stitches with ffmpeg at a chosen fps and duration. Use for the proof and close slides.
+Name every output slideN_final.mp4 so it never collides with an input clip on a case-insensitive Mac.
+
+── HOW WE WORK ──
+Do one slide at a time. Show me a still preview, wait for my yes, then wire the video or animation and hand me the HTML plus the matching convert command. I run the converters on my own machine with CHROMIUM pointed at my browser. Keep the comment keyword in sync across the how-it-works and close slides.",
     downloadUrl:"" }
 ];
 /* ===================================================================== */
