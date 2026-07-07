@@ -200,9 +200,9 @@ const CONFIG = {
 const MAGNETS = [
   { slug:"carousel-prompt", menu_title:"Carousel Prompt",
     kicker:"The Prompt", title:"Write your next carousel", titleAccent:"in one paste.", author:"@harshhh__ai",
-    intro:"Enter your email and the full prompt drops in right below, already shaped so you can hand Claude Code a single topic and get a finished seven-slide carousel back.",
+    intro:"Enter your email and you'll get the full prompt I hand Claude to build my animated carousels, so you can drop in a topic and a few references and have every slide rebuilt in your own brand, ready to turn into video.",
     boxLabel:"Copy the prompt",
-    content:"You're helping me build a 6-slide animated Instagram carousel. I'll give you a topic and, usually, reference screenshots from another creator. Rebuild each slide in MY brand as a self-contained HTML file at 1080×1350, then give me a converter that turns it into an MP4. Treat the references as structure and inspiration only, and never reuse their wording.
+    content:`You're helping me build a 6-slide animated Instagram carousel. I'll give you a topic and, usually, reference screenshots from another creator. Rebuild each slide in MY brand as a self-contained HTML file at 1080×1350, then give me a converter that turns it into an MP4. Treat the references as structure and inspiration only, and never reuse their wording.
 
 ── MY BRAND (fill these in) ──
 - Accent color: [YOUR HEX, e.g. a deep maroon]. Where it would disappear on a dark surface, lighten it to a readable tint of the same hue.
@@ -247,7 +247,7 @@ Every slide shares this skeleton, top to bottom: a kicker (short uppercase tag),
 Name every output slideN_final.mp4 so it never collides with an input clip on a case-insensitive Mac.
 
 ── HOW WE WORK ──
-Do one slide at a time. Show me a still preview, wait for my yes, then wire the video or animation and hand me the HTML plus the matching convert command. I run the converters on my own machine with CHROMIUM pointed at my browser. Keep the comment keyword in sync across the how-it-works and close slides.",
+Do one slide at a time. Show me a still preview, wait for my yes, then wire the video or animation and hand me the HTML plus the matching convert command. I run the converters on my own machine with CHROMIUM pointed at my browser. Keep the comment keyword in sync across the how-it-works and close slides.`,
     downloadUrl:"" }
 ];
 /* ===================================================================== */
@@ -257,19 +257,23 @@ let MAP = {}, ORDER = [], activeSlug = null;
 
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
 async function loadMagnets(){
-  if(!CONFIG.sheetUrl){ MAP={};ORDER=[]; MAGNETS.forEach(m=>{MAP[m.slug]=m;ORDER.push(m.slug);}); return; }
-  if(typeof Papa==='undefined'){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js'); }
-  const csv = await fetch(CONFIG.sheetUrl).then(r=>r.text());
-  const rows = Papa.parse(csv, {header:true, skipEmptyLines:true}).data;
-  MAP={};ORDER=[];
-  rows.forEach(r=>{
-    if(!r.slug) return; const s=r.slug.trim();
-    MAP[s]={ slug:s, menu_title:r.menu_title||r.title||s, kicker:r.kicker||"",
-      title:r.title||"", titleAccent:r.title_accent||r.titleAccent||"", author:r.author||"@harshhh__ai",
-      intro:r.intro||r.subtitle||"", boxLabel:r.box_label||r.boxLabel||"Copy this",
-      content:r.content||"", downloadUrl:r.download_url||r.downloadUrl||"" };
-    ORDER.push(s);
-  });
+  // in-code magnets are the safe base (the carousel one always lives here)
+  MAP={};ORDER=[]; MAGNETS.forEach(m=>{MAP[m.slug]=m;ORDER.push(m.slug);});
+  if(!CONFIG.sheetUrl) return;
+  try{
+    if(typeof Papa==='undefined'){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js'); }
+    const csv = await fetch(CONFIG.sheetUrl).then(r=>r.text());
+    const rows = Papa.parse(csv, {header:true, skipEmptyLines:true}).data;
+    rows.forEach(r=>{
+      if(!r.slug) return; const s=r.slug.trim();
+      const obj={ slug:s, menu_title:r.menu_title||r.title||s, kicker:r.kicker||"",
+        title:r.title||"", titleAccent:r.title_accent||r.titleAccent||"", author:r.author||"@harshhh__ai",
+        intro:r.intro||r.subtitle||"", boxLabel:r.box_label||r.boxLabel||"Copy this",
+        content:r.content||"", downloadUrl:r.download_url||r.downloadUrl||"" };
+      if(!MAP[s]) ORDER.push(s);   // new slug from the sheet joins the menu
+      MAP[s]=obj;                  // a matching slug lets the sheet override the code
+    });
+  }catch(e){ /* sheet unreachable — keep the in-code base so the site never breaks */ }
 }
 
 function currentSlug(){
